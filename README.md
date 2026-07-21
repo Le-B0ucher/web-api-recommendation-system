@@ -65,7 +65,7 @@ curl -X POST -d"rating=2&userId=1" localhost:3000/movies/1/review
 ~~~
 QUERY /recos
 
-idUser
+userId
 ~~~
 
 ### Noter un film
@@ -73,11 +73,8 @@ idUser
 ~~~
 POST /movies/1234/review
 
-idUser
-rating
+userId&rating
 ~~~
-
-
 
 ## Ressources utiles
 
