@@ -72,10 +72,13 @@ curl -X POST -d"rating=2&userId=1" localhost:3000/movies/1/review
     },
     "recos": {
       "href": "/recos"
+    },
+     "review": {
+      "href": "/movies/1/review"
     }
   },
   "title": "Inception",
-  "globalReview": "Note moyenne des utilisateurs (à implémenter)"
+  "globalReview": "Note moyenne donnée par l'ensemble des utilisateurs"
 }
 ~~~
 
