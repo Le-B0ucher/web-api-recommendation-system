@@ -4,6 +4,7 @@ Un système de recommandations de films.
 
 
 - [Web API et système de recommandations](#web-api-et-système-de-recommandations)
+  - [Lancer le projet](#lancer-le-projet)
   - [Spécifications](#spécifications)
   - [Ressources](#ressources)
   - [Modèles](#modèles)
@@ -11,8 +12,14 @@ Un système de recommandations de films.
   - [Représentations mises à disposition des clients](#représentations-mises-à-disposition-des-clients)
     - [Mes recommandations](#mes-recommandations)
     - [Noter un film](#noter-un-film)
-  - [Lancer le projet](#lancer-le-projet)
 
+
+## Lancer le projet
+
+~~~bash
+npm i
+npm run dev
+~~~
 
 ## Spécifications
 
@@ -61,8 +68,4 @@ rating
 ~~~
 
 
-## Lancer le projet
 
-~~~bash
-npm i
-~~~
