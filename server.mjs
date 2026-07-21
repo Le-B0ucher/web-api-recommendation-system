@@ -66,9 +66,10 @@ app.get("/movies/:id", (req, res, next) => {
       self: { href: `/movies/${req.params.id}` },
       movies: { href: "/movies" },
       recos: { href: "/recos" },
+      review: { href: `/movies/${req.params.id}/review` },
     },
     title: movie.titre,
-    globalReview: "Note moyenne des utilisateurs (à implémenter)",
+    globalReview: "Note moyenne donnée par l'ensemble des utilisateurs du système (à implémenter)",
   };
   return res.status(200).json(representation);
 });
