@@ -12,6 +12,7 @@ Un système de recommandations de films.
   - [Représentations mises à disposition des clients](#représentations-mises-à-disposition-des-clients)
     - [Mes recommandations](#mes-recommandations)
     - [Noter un film](#noter-un-film)
+  - [Ressources utiles](#ressources-utiles)
 
 
 ## Lancer le projet
@@ -69,3 +70,8 @@ rating
 
 
 
+## Ressources utiles
+
+- [jq](https://jqlang.org/)
+- [HAL RFC](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08#section-4.1.1)
+- [expressjs 5](https://expressjs.com/en/5x/api/)
