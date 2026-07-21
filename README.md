@@ -22,6 +22,12 @@ npm i
 npm run dev
 ~~~
 
+Utiliser l'API :
+
+~~~bash
+curl localhost:3000
+~~~
+
 ## Spécifications
 
 - Le système doit permettre de consulter un catalogue de films ;
