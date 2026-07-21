@@ -2,7 +2,19 @@
  * Base de données temporaire.
  */
 
-const users = [];
+
+const reviews = [];
+
+const users = [
+  {
+    id: 1,
+    name: "John Doe",
+  },
+  {
+    id: 2,
+    name: "Jane Doe",
+  },
+];
 
 const movies = [
   {
@@ -87,4 +99,4 @@ const movies = [
   },
 ];
 
-export { movies };
+export { movies, users, reviews};

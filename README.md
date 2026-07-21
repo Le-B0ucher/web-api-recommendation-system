@@ -25,7 +25,10 @@ npm run dev
 Utiliser l'API :
 
 ~~~bash
+#Point d'entrée API
 curl localhost:3000
+#Noter un film
+curl -X POST -d"rating=2&userId=1" localhost:3000/movies/1/review
 ~~~
 
 ## Spécifications

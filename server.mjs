@@ -3,11 +3,18 @@
  */
 
 import express from "express";
-import { movies } from "./database.mjs";
+import { movies, users, reviews } from "./database.mjs";
 
 const app = express();
+
+//Décoder le body au format application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
 const port = 3000;
 
+/**
+ * Retourne une représentation hypermédia (au format pseudo HAL) d'un film
+ */
 function mapMovieToResource(movie) {
   return {
     _links: {
@@ -48,7 +55,7 @@ app.get("/movies/:id", (req, res, next) => {
     return res.status(400).json({ error: "Bad request" });
   }
 
-  const movie = movies.find(m => m.id === Number.parseInt(req.params.id));
+  const movie = movies.find((m) => m.id === Number.parseInt(req.params.id));
 
   if (!movie) {
     return res.status(404).json({ error: "Unkown movie" });
@@ -61,13 +68,65 @@ app.get("/movies/:id", (req, res, next) => {
       recos: { href: "/recos" },
     },
     title: movie.titre,
-    rating: "Note moyenne des utilisateurs (à implémenter)",
+    globalReview: "Note moyenne des utilisateurs (à implémenter)",
   };
   return res.status(200).json(representation);
 });
 
 app.post("/movies/:id/review", (req, res) => {
-  //A implémenter.
+  const movieToReview = movies.find(
+    (m) => m.id === Number.parseInt(req.params.id),
+  );
+
+  if (!movieToReview) {
+    return res.status(404).json({ error: "Unkown movie" });
+  }
+
+  //Validation de la note (fournie et valeur correcte)
+  const rating = Number.parseInt(req.body.rating);
+
+  if (!Number.isInteger(rating) || ![0, 1, 2, 3, 4, 5].includes(rating)) {
+    return res
+      .status(404)
+      .json({ error: "Rating must be an integer between 0 and 5 (included)" });
+  }
+
+  //Validation de l'identifiant utilisateur (fourni et existe)
+  const userId = Number.parseInt(req.body.userId);
+
+  if (!userId) {
+    return res
+      .status(400)
+      .json({ error: "userId must be send to review the movie" });
+  }
+
+  const user = users.find((u) => u.id === userId);
+
+  if (!user) {
+    return res.status(400).json({ error: "user does not exist" });
+  }
+
+  //Review the movies
+  const currentReview = reviews.find(
+    (r) => r.userId === userId && r.movieId === movieToReview.id,
+  );
+
+  if (!currentReview) {
+    reviews.push({
+      userId: userId,
+      movieId: movieToReview.id,
+      rating: rating,
+    });
+  } else {
+    currentReview.rating = rating;
+  }
+
+  console.log(reviews);
+
+  // A faire : retourner une représentation hypermédia
+  return res
+    .status(201)
+    .json({ review: `You gave ${rating} to the movie ${movieToReview.titre}` });
 });
 
 app.use("/recos", (req, res) => {
