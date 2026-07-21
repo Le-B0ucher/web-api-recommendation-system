@@ -9,6 +9,7 @@ Un système de recommandations de films.
   - [Ressources](#ressources)
   - [Modèles](#modèles)
   - [Représentations acceptées par le client](#représentations-acceptées-par-le-client)
+    - [Détail d'un film](#détail-dun-film)
   - [Représentations mises à disposition des clients](#représentations-mises-à-disposition-des-clients)
     - [Mes recommandations](#mes-recommandations)
     - [Noter un film](#noter-un-film)
@@ -57,6 +58,28 @@ curl -X POST -d"rating=2&userId=1" localhost:3000/movies/1/review
 - Review : id_user, id_movie, rating
 
 ## Représentations acceptées par le client
+
+### Détail d'un film
+
+~~~json
+{
+  "_links": {
+    "self": {
+      "href": "/movies/1"
+    },
+    "movies": {
+      "href": "/movies"
+    },
+    "recos": {
+      "href": "/recos"
+    }
+  },
+  "title": "Inception",
+  "globalReview": "Note moyenne des utilisateurs (à implémenter)"
+}
+~~~
+
+> Etc. Définir le format (HAL, etc.) et schéma des représentations des ressources avec lesquelles le client va travailler
 
 ## Représentations mises à disposition des clients
 
