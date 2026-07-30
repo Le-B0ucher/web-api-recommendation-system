@@ -1,23 +1,23 @@
 {
-  "name": "recommendation system",
+  "name": "recommendation-system",
   "version": "1.0.0",
   "description": "Web API et système de recommandations",
-  "main": "index.js",
+  "main": "server.mjs",
   "scripts": {
-    "dev" : "./node_modules/.bin/nodemon server.mjs"
+    "dev": "nodemon server.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/paul-schuhm/web-api-recommendation-system.git"
+    "url": "git+https://github.com/Le-B0ucher/web-api-recommendation-system.git"
   },
   "keywords": [],
-  "author": "Paul Schuhmacher",
+  "author": "Robin",
   "license": "ISC",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/paul-schuhm/web-api-recommendation-system/issues"
+    "url": "https://github.com/Le-B0ucher/web-api-recommendation-system/issues"
   },
-  "homepage": "https://github.com/paul-schuhm/web-api-recommendation-system#readme",
+  "homepage": "https://github.com/Le-B0ucher/web-api-recommendation-system#readme",
   "dependencies": {
     "express": "^5.2.1"
   },

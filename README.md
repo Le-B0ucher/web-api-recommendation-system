@@ -1,83 +1,59 @@
-# Web API et système de recommandations
+# Web API et système de recommandations de films
 
-Un système de recommandations de films.
-
-
-- [Web API et système de recommandations](#web-api-et-système-de-recommandations)
-  - [Lancer le projet](#lancer-le-projet)
-  - [Spécifications](#spécifications)
-  - [Ressources](#ressources)
-  - [Modèles](#modèles)
-  - [Représentations acceptées par le client](#représentations-acceptées-par-le-client)
-  - [Représentations mises à disposition des clients](#représentations-mises-à-disposition-des-clients)
-    - [Mes recommandations](#mes-recommandations)
-    - [Noter un film](#noter-un-film)
-  - [Ressources utiles](#ressources-utiles)
-
+API Node.js/Express de recommandation de films basée sur la similarité entre profils utilisateurs (distance euclidienne).
 
 ## Lancer le projet
 
-~~~bash
-npm i
+```bash
+npm install
 npm run dev
-~~~
+```
 
-Utiliser l'API :
+L'API écoute sur `http://localhost:3000`.
 
-~~~bash
-curl localhost:3000
-~~~
+## Ressources / Endpoints
 
-## Spécifications
+| Méthode | URL | Description |
+|---------|-----|-------------|
+| GET | `/` | Point d'entrée (liens HAL) |
+| GET | `/movies` | Catalogue des films, avec note moyenne (`globalReview`) |
+| GET | `/movies/top` | Les 10 films les mieux notés |
+| GET | `/movies/:id` | Détail d'un film, avec sa note moyenne |
+| GET | `/recos?userId=1` | Recommandations pour un utilisateur |
 
-- Le système doit permettre de consulter un catalogue de films ;
-- L'utilisateur peut noter un film de 0 à 5, 5 étant la meilleure note ;
-- Le système doit recommander à chaque utilisateur une liste de films *susceptible de lui plaire*.
-- Un utilisateur est identifié par un numéro unique
+### Exemples cURL
 
+```bash
+curl http://localhost:3000/movies
+curl http://localhost:3000/movies/top
+curl "http://localhost:3000/recos?userId=1"
+```
 
-## Ressources
+## Documentation
 
+### Modèles de données
 
-| Label                 | URL                   | Méthodes HTTP | Commentaires |
-| --------------------- | --------------------- | ------------- | ------------ |
-| Le catalogue de films | `/movies`             | GET           |              |
-| Le détail d'un film   | `/movies/{id}`        | GET           |              |
-| Noter un film         | `/movies/{id}/review` | POST          |              |
-| Mes recommandations   | `/recos`              | QUERY         |              |
+- **User** : `id`, `name`
+- **Movie** : `id`, `titre`
+- **Review** : `userId`, `movieId`, `rating` (note de 0 à 5)
 
+Les données sont en mémoire dans `database.mjs`.
 
-## Modèles
+### Module de recommandations (`recommandations.mjs`)
 
-- Movie : id_movie, title
-- User : id_user, name
-- Review : id_user, id_movie, rating
+- `distance(reviewsA, reviewsB)` : distance euclidienne entre deux séries de notes.
+- `similarity(userA, userB)` : coefficient de similarité (entre 0 et 1) basé sur la distance. On exige au moins 2 films en commun pour une comparaison fiable.
+- `makeRecommandations(user, nbRecos = 3)` : liste des films recommandés, triés par score décroissant.
 
-## Représentations acceptées par le client
+### Algorithme
 
-## Représentations mises à disposition des clients
+Pour chaque profil suffisamment similaire à l'utilisateur (similarité ≥ 0,5), on cumule les notes des films qu'il n'a pas encore vus, pondérées par la similarité, puis on normalise. Les films au meilleur score sont recommandés.
 
-### Mes recommandations
+## Choix techniques
 
-~~~
-QUERY /recos
+- **`GET /recos?userId=1`** (query parameter) est utilisé à la place de la méthode `QUERY`, encore expérimentale et peu supportée par Express 5.
+- La route `/movies/top` est déclarée **avant** `/movies/:id` pour éviter que « top » soit interprété comme un identifiant.
 
-idUser
-~~~
+## Commentaires
 
-### Noter un film
-
-~~~
-POST /movies/1234/review
-
-idUser
-rating
-~~~
-
-
-
-## Ressources utiles
-
-- [jq](https://jqlang.org/)
-- [HAL RFC](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08#section-4.1.1)
-- [expressjs 5](https://expressjs.com/en/5x/api/)
+Test de validation : `makeRecommandations(1)` (John Doe) privilégie bien **The Dark Knight** et **Forrest Gump**, portés respectivement par Jane (profil jumeau) et Alice (profil proche). Ces deux films ressortent à égalité de score car chacun n'est recommandé que par un seul profil proche ; en cas d'égalité, l'ordre dépend du tri.
